@@ -1,10 +1,12 @@
 # OpenClawTypecho
 
-> **OpenClaw Typecho Skill** — 最轻量的 AI 知识库方案。
->
-> 一台廉价的 PHP 虚拟主机 + 一个 Typecho 博客 + 这个插件 = **AI 直接管理的在线知识库**。装完插件，把 Skill 文件丢给 AI，即可开始归档、检索、更新文章。无需维护索引文件，无需配置目录规则，无需担心 Token 暴雷。
->
-> **与 Obsidian AI 知识库的区别？**
+**OpenClaw Typecho Skill** — 最轻量的 AI 知识库方案。
+
+一台廉价的 PHP 虚拟主机 + 一个 Typecho 博客 + 这个插件 = **AI 直接管理的在线知识库**。装完插件，把 Skill 文件丢给 AI，即可开始归档、检索、更新文章。无需维护索引文件，无需配置目录规则，无需担心 Token 暴雷。
+
+**实际效果演示** → [https://kjifds.top/archives/12/](https://kjifds.top/archives/12/)
+
+**与 Obsidian AI 知识库的区别？**
 > | | OpenClawTypecho | Obsidian + AI |
 > |---|---|---|
 > | **成本** | 虚拟主机 ¥50-100/年 | 本地免费，但 AI 插件/API 额外计费 |

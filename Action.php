@@ -533,10 +533,11 @@ class Action extends Contents implements ActionInterface
     {
         switch ($status) {
             case 'waiting': return 'waiting';
-            case 'draft': return 'publish';
+            case 'draft':   return 'publish';
+            case 'publish': return 'publish';
             case 'private': return 'private';
-            case 'hidden': return 'hidden';
-            default: return null;
+            case 'hidden':  return 'hidden';
+            default:        return null;
         }
     }
 
@@ -624,15 +625,12 @@ class Action extends Contents implements ActionInterface
     }
 
     /**
-     * 状态强制约束
+     * 状态约束——保留 draft 特殊处理，其余原样透传
      */
     protected function sanitizeStatus(?string $value): string
     {
-        $allowed = ['waiting', 'draft', 'private', 'hidden'];
-        if (in_array($value, $allowed, true)) {
-            return $value;
-        }
-        return 'waiting';
+        $value = trim($value ?? '');
+        return $value !== '' ? $value : 'waiting';
     }
 
     /**
