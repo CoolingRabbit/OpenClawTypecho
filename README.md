@@ -48,7 +48,14 @@ define('__TYPECHO_SECURE__', true);
 
 ### 升级注意
 
-**Typecho 升级后，`usr/plugins/OpenClawTypecho/` 目录会被覆盖**，需要重新上传插件文件。建议将插件源码备份，升级后快速恢复。
+Typecho 升级通常**不会覆盖** `usr/plugins/` 目录（第三方插件是安全的）。但以下核心文件修改会丢失，升级后需重新修改：
+
+| 文件 | 修改内容 | 原因 |
+|------|---------|------|
+| `config.inc.php` | `define('__TYPECHO_SECURE__', true);` | 启用 HTTPS |
+| `admin/login.php` | 跳转改为 `adminUrl('index.php', true)` | 修复伪静态下登录 404 |
+| `var/Widget/Login.php` | 同上 | 修复伪静态下登录 404 |
+| 主题文件（如 `usr/themes/cybergeek/`）| 视主题是否内置而定 | 自定义主题需备份 |
 
 ---
 
