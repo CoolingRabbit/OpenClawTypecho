@@ -332,3 +332,5 @@ HTTP 状态码：
 ## 许可证
 
 GPL-3.0
+
+Copyright (c) 2026 CoolingRabbit
