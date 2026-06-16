@@ -20,14 +20,21 @@
 
 ### 配置命令
 
+**AI 根据自己所处的平台，选择合适的方式将以下配置持久化：**
+
 ```
-kimi skill config typecho-publisher domain=<博客地址> token=<Token> [default_category=<分类>] [default_tags=<标签1,标签2>]
+domain=<博客地址>
+token=<Token>
+default_category=<分类>    (可选)
+default_tags=<标签1,标签2>  (可选)
 ```
 
-**配置示例：**
-```
-kimi skill config typecho-publisher domain=https://www.example.com token=AbCdEfGh123456 default_category=技术笔记 default_tags=笔记,Typecho,教程
-```
+**AI 应引导用户完成配置，例如：**
+> 您还没有配置 Typecho 博客信息，请配置以下参数：
+> - `domain`: 你的博客地址，如 `https://www.example.com`
+> - `token`: 插件 API Token
+>
+> 请根据你的 AI 平台配置方式完成设置。
 
 ### 配置获取方式
 
@@ -56,11 +63,11 @@ kimi skill config typecho-publisher domain=https://www.example.com token=AbCdEfG
 - 若 `domain` 和 `token` 均已配置 → 进入第 2 步
 - 若任一未配置 → **提示用户配置，不继续执行**
 
-> 您还没有配置 Typecho 博客信息，请先配置：
-> ```
-> kimi skill config typecho-publisher domain=<博客地址> token=<Token>
-> ```
-> 配置完成后再次触发即可自动发布。
+> 您还没有配置 Typecho 博客信息，请先配置以下参数：
+> - `domain`: 你的博客地址，如 `https://www.example.com`
+> - `token`: 插件 API Token
+>
+> 请根据你的 AI 平台配置方式完成设置，配置完成后再次触发即可自动发布。
 
 ---
 
