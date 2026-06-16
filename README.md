@@ -16,9 +16,8 @@
 
 ## 安装
 
-1. 下载本插件
-2. 将 `Plugin.php` 和 `Action.php` 上传到 Typecho 服务器 `usr/plugins/OpenClawTypecho/`
-3. 后台 → 插件 → 启用 **OpenClawTypecho** → 进入设置
+1. 将 `Plugin.php` 和 `Action.php` 上传到 Typecho 服务器 `usr/plugins/OpenClawTypecho/`
+2. 后台 → 插件 → 启用 **OpenClawTypecho** → 进入设置
 
 ### 配置项
 
@@ -27,35 +26,6 @@
 | **API 访问密钥 (Token)** | 点击"🔑 自动生成"按钮生成，AI 调用时携带 `Authorization: Bearer <token>` |
 | **AI 文章归属作者** | 下拉框选择用户。建议创建专用用户 `ai` |
 | **默认文章分类** | 如 `AI知识库`。不存在时自动创建 |
-
----
-
-## 环境要求
-
-- Typecho ≥ 1.2.0（推荐 1.3.0）
-- PHP ≥ 7.4（推荐 8.x）
-- 开启伪静态（推荐 WordPress 规则）
-
-### HTTPS 额外配置
-
-如果你的博客使用 HTTPS，需要在 `config.inc.php` 中添加：
-
-```php
-define('__TYPECHO_SECURE__', true);
-```
-
-这样 Typecho 生成的所有内部链接都会自动使用 `https://`。
-
-### 升级注意
-
-Typecho 升级通常**不会覆盖** `usr/plugins/` 目录（第三方插件是安全的）。但以下核心文件修改会丢失，升级后需重新修改：
-
-| 文件 | 修改内容 | 原因 |
-|------|---------|------|
-| `config.inc.php` | `define('__TYPECHO_SECURE__', true);` | 启用 HTTPS |
-| `admin/login.php` | 跳转改为 `adminUrl('index.php', true)` | 修复伪静态下登录 404 |
-| `var/Widget/Login.php` | 同上 | 修复伪静态下登录 404 |
-| 主题文件（如 `usr/themes/cybergeek/`）| 视主题是否内置而定 | 自定义主题需备份 |
 
 ---
 
@@ -81,7 +51,7 @@ Authorization: Bearer <token>
 | `category` | string | 否 | `AI知识库`（插件设置） | 分类名称。不存在时自动创建 |
 | `tags` | array | 否 | `[]` | 标签数组 |
 | `slug` | string | 否 | 自动生成 | URL 缩略名（仅限字母、数字、`-`、`_`） |
-| `status` | string | 否 | `waiting` | 文章状态。见下方选项 |
+| `status` | string | 否 | `waiting` | 文章状态 |
 
 **状态选项：**
 
@@ -107,6 +77,13 @@ Authorization: Bearer <token>
 ## 给 AI 的接入模板
 
 参考 `OpenClaw Typecho Skill.md` — 让 AI 按流程引导用户填写博客地址和 Token 后即可自动发布。
+
+---
+
+## 环境要求
+
+- Typecho ≥ 1.2.0
+- PHP ≥ 7.4
 
 ---
 
