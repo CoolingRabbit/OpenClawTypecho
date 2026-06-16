@@ -14,7 +14,9 @@
 
 ---
 
-## 安装
+## 使用方式
+
+### 第一步：安装插件到 Typecho
 
 1. 将 `Plugin.php` 和 `Action.php` 上传到 Typecho 服务器 `usr/plugins/OpenClawTypecho/`
 2. 后台 → 插件 → 启用 **OpenClawTypecho** → 进入设置
@@ -26,6 +28,12 @@
 | **API 访问密钥 (Token)** | 点击"🔑 自动生成"按钮生成，AI 调用时携带 `Authorization: Bearer <token>` |
 | **AI 文章归属作者** | 下拉框选择用户。建议创建专用用户 `ai` |
 | **默认文章分类** | 如 `AI知识库`。不存在时自动创建 |
+
+### 第二步：将 Skill 提交给 AI Agent
+
+把 **`OpenClaw Typecho Skill.md`** 提交给你的 AI Agent（如 OpenClaw、ChatGPT、Kimi 等），Agent 会自动完成 Skill 安装和配置。
+
+配置一次后，AI 即可直接管理您的博客文章，无需重复询问。
 
 ---
 
@@ -283,11 +291,7 @@ HTTP 状态码：
 
 ---
 
-## 给 AI 的接入模板
 
-参考 `OpenClaw Typecho Skill.md` — AI 通过本地配置一次博客地址和 Token，后续即可直接自动发布，无需重复询问。
-
----
 
 ## 环境要求
 
