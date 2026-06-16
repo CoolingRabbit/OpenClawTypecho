@@ -1,6 +1,13 @@
 # OpenClawTypecho
 
-> **OpenClaw Typecho Skill** — 让 OpenClaw 等 AI 自动向 Typecho 博客推送文章，构建 AI 知识库。
+> **OpenClaw Typecho Skill** — 零配置门槛，把你的 Typecho 博客变成 AI 知识库。
+>
+> 安装插件，将 Skill 文件丢给 AI，即可拥有一个**会自动归档、整理、检索**的智能个人博客。无需手动复制粘贴，AI 直接帮你完成文章的创建、查询、更新、删除。
+>
+> **与 Obsidian 相比？**
+> - Obsidian 是本地笔记，需要手动整理；这里是 **AI 自动管理 + 在线可访问**
+> - 你的知识库天生就是一个**可公开访问的个人博客**，而非封闭的本地文件
+> - AI 可以直接操作，无需你充当"人肉中间件"
 
 ---
 
