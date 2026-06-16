@@ -30,6 +30,28 @@
 
 ---
 
+## 环境要求
+
+- Typecho ≥ 1.2.0（推荐 1.3.0）
+- PHP ≥ 7.4（推荐 8.x）
+- 开启伪静态（推荐 WordPress 规则）
+
+### HTTPS 额外配置
+
+如果你的博客使用 HTTPS，需要在 `config.inc.php` 中添加：
+
+```php
+define('__TYPECHO_SECURE__', true);
+```
+
+这样 Typecho 生成的所有内部链接都会自动使用 `https://`。
+
+### 升级注意
+
+**Typecho 升级后，`usr/plugins/OpenClawTypecho/` 目录会被覆盖**，需要重新上传插件文件。建议将插件源码备份，升级后快速恢复。
+
+---
+
 ## API 端点
 
 ```
@@ -48,13 +70,20 @@ Authorization: Bearer <token>
 |------|------|------|--------|------|
 | `title` | string | ✅ | — | 文章标题 |
 | `text` | string | ✅ | — | 文章正文 |
-| `markdown` | boolean | ❌ | `true` | 是否 Markdown 格式 |
-| `category` | string | ❌ | 默认分类 | 分类名称 |
-| `tags` | array | ❌ | `[]` | 标签数组 |
-| `slug` | string | ❌ | 自动生成 | URL 缩略名 |
-| `status` | string | ❌ | `waiting` | 状态选项见下 |
+| `markdown` | boolean | 否 | `true` | 是否 Markdown 格式。不传时自动加 `<!--markdown-->` 标记 |
+| `category` | string | 否 | `AI知识库`（插件设置） | 分类名称。不存在时自动创建 |
+| `tags` | array | 否 | `[]` | 标签数组 |
+| `slug` | string | 否 | 自动生成 | URL 缩略名（仅限字母、数字、`-`、`_`） |
+| `status` | string | 否 | `waiting` | 文章状态。见下方选项 |
 
-**状态选项：** `waiting`（待审核） / `draft`（草稿） / `private`（私密） / `hidden`（隐藏）
+**状态选项：**
+
+| 状态 | 说明 | 适用场景 |
+|------|------|---------|
+| `waiting` | 待审核，后台手动发布 | **默认推荐**，适合内容审核 |
+| `draft` | 草稿 | 暂不公开 |
+| `private` | 私密 | 仅作者可见 |
+| `hidden` | 隐藏 | 可通过 URL 访问但不在列表中 |
 
 ---
 
@@ -62,7 +91,7 @@ Authorization: Bearer <token>
 
 - Bearer Token 鉴权
 - 只接受 POST + JSON
-- 敏感内容过滤（手机号、身份证、银行卡号）
+- 敏感内容过滤（手机号、身份证、银行卡号自动拦截）
 - XSS 过滤
 - 标题 ≤ 200 字符，正文 ≤ 50KB
 
@@ -71,14 +100,6 @@ Authorization: Bearer <token>
 ## 给 AI 的接入模板
 
 参考 `OpenClaw Typecho Skill.md` — 让 AI 按流程引导用户填写博客地址和 Token 后即可自动发布。
-
----
-
-## 环境要求
-
-- Typecho ≥ 1.2.0（推荐 1.3.0）
-- PHP ≥ 7.4（推荐 8.x）
-- 开启伪静态（推荐 WordPress 规则）
 
 ---
 
