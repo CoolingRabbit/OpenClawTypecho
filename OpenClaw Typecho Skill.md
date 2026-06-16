@@ -1,6 +1,6 @@
 # OpenClaw Typecho Skill
 
-> **用途**：当 Kimi 需要将生成的内容保存到 Typecho 博客时，按此流程操作。  
+> **用途**：当 AI 需要将生成的内容保存到 Typecho 博客时，按此流程操作。  
 > **版本**：1.0.0
 
 ---
@@ -123,7 +123,7 @@ Content-Type: application/json
 
 **标签（3-5 个）：**
 - 技术：`Python`, `Typecho`, `Nginx`, `SSL`, `Docker`
-- AI：`LLM`, `Kimi`, `Prompt`, `RAG`
+- AI：`LLM`, `OpenClaw`, `Prompt`, `RAG`
 - 通用：`笔记`, `备忘`, `教程`, `踩坑`
 
 ---

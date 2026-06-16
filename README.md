@@ -1,12 +1,12 @@
 # OpenClawTypecho
 
-> **OpenClaw Typecho Skill** — 让 OpenClaw（如 Kimi）自动向 Typecho 博客推送文章，构建 AI 知识库。
+> **OpenClaw Typecho Skill** — 让 OpenClaw 等 AI 自动向 Typecho 博客推送文章，构建 AI 知识库。
 
 ---
 
 ## 功能
 
-- 为 OpenClaw / Kimi 等 AI 服务提供 REST API 端点
+- 为 OpenClaw 等 AI 服务提供 REST API 端点
 - 自动创建文章到 Typecho 博客，支持 Markdown 格式
 - 自动创建分类、标签
 - Token 鉴权 + 敏感内容过滤
