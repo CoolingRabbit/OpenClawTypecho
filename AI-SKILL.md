@@ -26,8 +26,8 @@
 **用户回复后，AI 记录：**
 - `DOMAIN` = 用户提供的域名（如 `https://www.example.com`）
 
-**如果没有提供，AI 使用默认值：**
-- `DOMAIN` = `https://www.kjifds.top`（你自己的博客地址，可根据需要修改）
+**如果用户未提供博客地址，AI 必须再次询问，不可使用默认地址。**
+> 您还没有提供博客地址，这是发布文章的必需信息。请提供您的 Typecho 博客地址（如 `https://www.example.com`）。
 
 ---
 
@@ -69,7 +69,7 @@ Content-Type: application/json
 
 ## 请求参数
 
-| 字段 | 类型 | 必须 | 说明 | 默认值 |
+| 字段 | 类型 | 必填 | 说明 | 默认值 |
 |------|------|------|------|--------|
 | `title` | string | ✅ | 文章标题 | — |
 | `text` | string | ✅ | 文章正文（Markdown） | — |
