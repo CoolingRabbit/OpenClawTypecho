@@ -14,11 +14,11 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
 /**
  * OpenClaw Typecho Skill
  *
- * 为 OpenClaw 等 AI 服务提供 REST API，自动向 Typecho 博客推送文章，构建 AI 知识库。
+ * 为 OpenClaw 等 AI 服务提供 REST API，支持向 Typecho 博客创建、查询、更新、删除文章，构建 AI 知识库。
  *
  * @package OpenClawTypecho
  * @author CoolingRabbit
- * @version 1.0.0
+ * @version 1.1.0
  * @link https://github.com/CoolingRabbit/OpenClawTypecho
  */
 class Plugin implements PluginInterface
