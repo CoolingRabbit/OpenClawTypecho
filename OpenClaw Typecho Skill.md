@@ -5,6 +5,37 @@
 
 ---
 
+## 配置说明
+
+本 Skill 通过本地配置持久化博客地址和 Token，配置一次后无需重复询问。
+
+### 配置项
+
+| 配置项 | 必填 | 说明 | 示例 |
+|--------|------|------|------|
+| `domain` | ✅ | Typecho 博客地址 | `https://www.example.com` |
+| `token` | ✅ | OpenClawTypecho 插件的 API Token | `sk-live-xxx` |
+| `default_category` | 否 | 默认分类 | `AI知识库` |
+| `default_tags` | 否 | 默认标签数组 | `["笔记", "Typecho"]` |
+
+### 配置命令
+
+```
+kimi skill config typecho-publisher domain=<博客地址> token=<Token> [default_category=<分类>] [default_tags=<标签1,标签2>]
+```
+
+**配置示例：**
+```
+kimi skill config typecho-publisher domain=https://www.example.com token=AbCdEfGh123456 default_category=技术笔记 default_tags=笔记,Typecho,教程
+```
+
+### 配置获取方式
+
+- **博客地址**：你的 Typecho 博客 URL，如 `https://www.example.com`
+- **API Token**：登录博客后台 → 插件 → OpenClawTypecho → 设置 → 点击"🔑 自动生成随机 Token" → 复制
+
+---
+
 ## 触发条件
 
 以下关键词触发发布操作：
@@ -16,52 +47,43 @@
 
 ---
 
-## 接入流程（AI 引导用户）
+## 接入流程
 
-### 第 1 步：确认博客地址
+### 第 1 步：读取配置
 
-**AI 询问用户：**
-> 您想将内容发布到哪个 Typecho 博客？请提供博客地址（如 `https://www.example.com`）。
+**检测触发词后，首先读取本地配置：**
 
-**用户回复后，AI 记录：**
-- `DOMAIN` = 用户提供的域名（如 `https://www.example.com`）
+- 若 `domain` 和 `token` 均已配置 → 进入第 2 步
+- 若任一未配置 → **提示用户配置，不继续执行**
 
-**如果用户未提供博客地址，AI 必须再次询问，不可使用默认地址。**
-> 您还没有提供博客地址，这是发布文章的必需信息。请提供您的 Typecho 博客地址（如 `https://www.example.com`）。
-
----
-
-### 第 2 步：确认 API Token
-
-**AI 询问用户：**
-> 请提供 OpenClawTypecho 插件的 API Token。获取方式：登录博客后台 → 插件 → OpenClawTypecho → 设置 → 复制 Token 字段。
-
-**用户回复后，AI 记录：**
-- `TOKEN` = 用户提供的 Token
-
-**如果用户没有 Token：**
-> 您还没有配置 Token，请先去博客后台生成：插件 → OpenClawTypecho → 点击"🔑 自动生成随机 Token" → 复制保存。
+> 您还没有配置 Typecho 博客信息，请先配置：
+> ```
+> kimi skill config typecho-publisher domain=<博客地址> token=<Token>
+> ```
+> 配置完成后再次触发即可自动发布。
 
 ---
 
-### 第 3 步：确认作者和分类（可选）
+### 第 2 步：确认分类和标签（可选）
 
 **AI 询问用户：**
-> 文章归属作者和分类使用插件默认值吗？（默认作者：插件设置中选择的用户；默认分类：插件设置中的默认分类）
+> 文章使用默认分类和标签吗？（默认分类：`{config.default_category}`；默认标签：`{config.default_tags}`）
 
 **用户可自定义：**
 - `CATEGORY` = 自定义分类名称（如"技术笔记"）
 - `TAGS` = 标签数组（如 `["Python", "教程"]`）
 
+**用户可直接回答"默认"或直接跳过 → 使用配置中的默认值。**
+
 ---
 
-### 第 4 步：调用 API 发布
+### 第 3 步：调用 API 发布
 
 **确认信息完整后，AI 发送请求：**
 
 ```
-POST {DOMAIN}/index.php/action/openclaw-submit
-Authorization: Bearer {TOKEN}
+POST {config.domain}/index.php/action/openclaw-submit
+Authorization: Bearer {config.token}
 Content-Type: application/json
 ```
 
@@ -73,11 +95,11 @@ Content-Type: application/json
 |------|------|------|------|--------|
 | `title` | string | ✅ | 文章标题 | — |
 | `text` | string | ✅ | 文章正文（Markdown） | — |
-| `markdown` | boolean | ❌ | 是否 Markdown | `true` |
-| `category` | string | ❌ | 分类名称 | 插件默认分类 |
-| `tags` | array | ❌ | 标签数组 | `[]` |
-| `slug` | string | ❌ | URL 缩略名 | 自动生成 |
-| `status` | string | ❌ | 文章状态 | `waiting` |
+| `markdown` | boolean | 否 | 是否 Markdown | `true` |
+| `category` | string | 否 | 分类名称 | `config.default_category` 或 `AI知识库` |
+| `tags` | array | 否 | 标签数组 | `config.default_tags` 或 `[]` |
+| `slug` | string | 否 | URL 缩略名 | 自动生成 |
+| `status` | string | 否 | 文章状态 | `waiting` |
 
 **状态选项：**
 | 状态 | 使用场景 |
@@ -178,9 +200,9 @@ Content-Type: application/json
 ## 使用流程（AI 执行）
 
 1. **检测触发词** — 用户说"发文章到博客"等
-2. **询问博客地址** — 如果未配置，请用户提供 `DOMAIN`
-3. **询问 Token** — 如果未配置，请用户提供 `TOKEN`
-4. **询问分类/标签** — 可选，使用默认值或用户自定义
+2. **读取配置** — 从 `config.json` 读取 `domain` 和 `token`
+3. **未配置时提示** — 给出配置命令，等待用户配置
+4. **已配置时确认分类/标签** — 可选，使用默认值或用户自定义
 5. **组织内容** — 整理标题、正文、标签、分类
 6. **调用 API** — 发送 POST 请求
 7. **反馈结果** — 告知用户已保存，状态是待审核/草稿等
@@ -189,7 +211,7 @@ Content-Type: application/json
 
 ## 注意事项
 
-- **Token 安全**：Token 是访问密钥，不要在公开对话中泄露。建议用户将 Token 保存在环境变量或安全配置中。
+- **Token 安全**：Token 是访问密钥，不要在公开对话中泄露。建议用户将 Token 保存在本地配置中。
 - **正文长度**：不超过 50KB（约 5 万字），超长内容应分多篇发布。
 - **敏感信息**：API 会自动拦截手机号、身份证号、银行卡号。如果内容被拦截，需用户人工确认后重试。
 - **图片处理**：不支持直接上传图片。图片需使用外部图床 URL，在正文用 Markdown 图片语法引用。
@@ -199,13 +221,11 @@ Content-Type: application/json
 
 ## 快速配置（供用户参考）
 
-**用户需要准备的信息：**
+**首次使用需要配置的信息：**
 
 | 信息 | 获取方式 |
 |------|---------|
 | 博客地址 | 你的 Typecho 博客 URL，如 `https://www.example.com` |
 | API Token | 后台 → 插件 → OpenClawTypecho → 设置 → 点击"🔑 自动生成随机 Token" → 复制 |
-| 默认作者 | 后台 → 插件 → OpenClawTypecho → 设置 → 选择 AI 文章归属作者 |
-| 默认分类 | 后台 → 插件 → OpenClawTypecho → 设置 → 默认文章分类 |
 
-**将这些信息提供给 AI 后，AI 即可自动发布文章到您的博客。**
+**配置一次后，AI 即可直接发布文章到您的博客，无需重复询问。**

@@ -76,7 +76,7 @@ Authorization: Bearer <token>
 
 ## 给 AI 的接入模板
 
-参考 `OpenClaw Typecho Skill.md` — 让 AI 按流程引导用户填写博客地址和 Token 后即可自动发布。
+参考 `OpenClaw Typecho Skill.md` — AI 通过本地配置一次博客地址和 Token，后续即可直接自动发布，无需重复询问。
 
 ---
 
