@@ -4,12 +4,12 @@
 
 一台廉价的 PHP 虚拟主机 + 一个 Typecho 博客 + 这个插件 = **AI 直接管理的在线知识库**。装完插件，把 Skill 文件丢给 AI，即可开始归档、检索、更新文章。无需维护索引文件，无需配置目录规则，无需担心 Token 暴雷。
 
-**实际效果演示** → [https://kjifds.top/archives/12/](https://kjifds.top/archives/12/)
+**实际效果演示** → [https://www.kjifds.top/](https://www.kjifds.top/) (配置：新网虚拟主机 350元/十年)
 
 **与 Obsidian AI 知识库的区别？**
 > | | OpenClawTypecho | Obsidian + AI |
 > |---|---|---|
-> | **成本** | 虚拟主机 ¥50-100/年 | 本地免费，但 AI 插件/API 额外计费 |
+> | **成本** | 虚拟主机 ¥35/年 | 本地免费，但 AI 插件/API 额外计费 |
 > | **配置** | 装插件 → 配置 Token → 完事 | 需维护 CLAUDE.md、index.md、目录结构 |
 > | **访问** | 天生在线，URL 即可分享 | 本地优先，分享需配同步 |
 > | **AI 操作** | API 直写数据库，无 Token 压力 | AI 需读取大量 Markdown，上下文易爆炸 |
