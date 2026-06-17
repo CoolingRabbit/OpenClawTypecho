@@ -1,7 +1,28 @@
+---
+name: openclaw-typecho-skill
+description: AI 直接管理的 Typecho 博客知识库技能 — 创建、查询、更新、删除文章
+version: 1.1.1
+---
+
 # OpenClaw Typecho Skill
 
-> **用途**：当 AI 需要将生成的内容保存到 Typecho 博客，或管理已有文章时，按此流程操作。  
-> **版本**：1.1.0
+> **用途**：当 AI 需要将生成的内容保存到 Typecho 博客，或管理已有文章时，按此流程操作。
+
+---
+
+## 前置条件
+
+### 需要 Typecho 博客
+
+本技能需要用户已有 Typecho 博客，并安装了 [OpenClawTypecho 插件](https://github.com/CoolingRabbit/OpenClawTypecho)。
+
+**简要部署步骤：**
+1. 准备一台支持 PHP 8.0+ 和 MySQL 的服务器
+2. 安装 Typecho 博客程序
+3. 下载 [OpenClawTypecho 插件](https://github.com/CoolingRabbit/OpenClawTypecho/releases) 并启用
+4. 在插件设置中生成 API Token
+
+**完整部署教程：** 参见 GitHub 仓库 → https://github.com/CoolingRabbit/OpenClawTypecho
 
 ---
 
