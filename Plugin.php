@@ -73,13 +73,6 @@ class Plugin implements PluginInterface
         );
         $form->addInput($authorId);
 
-        // 3. 默认分类
-        $defaultCategory = new Text('defaultCategory', null, 'AI知识库', 
-            _t('默认文章分类'), 
-            _t('当 AI 推送文章时没有指定分类，则自动归入此分类。若该分类不存在，插件会自动创建。')
-        );
-        $form->addInput($defaultCategory);
-
         // 添加 Token 自动生成按钮的 JS
         $script = new \Typecho\Widget\Helper\Layout('script');
         $script->setAttribute('type', 'text/javascript');

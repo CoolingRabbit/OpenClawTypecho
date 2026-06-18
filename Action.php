@@ -141,10 +141,12 @@ class Action extends Contents implements ActionInterface
             throw new \Exception('创建文章失败');
         }
 
-        $categoryName = $category ?: ($config->defaultCategory ?? 'AI知识库');
-        $categoryId = $this->ensureCategory($categoryName);
-        if ($categoryId) {
-            $this->setCategories($cid, [$categoryId], false, false);
+        $categoryName = $category;
+        if (!empty($categoryName)) {
+            $categoryId = $this->ensureCategory($categoryName);
+            if ($categoryId) {
+                $this->setCategories($cid, [$categoryId], false, false);
+            }
         }
 
         if (!empty($tags)) {
