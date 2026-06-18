@@ -42,7 +42,6 @@
 |--------|------|
 | **API 访问密钥 (Token)** | 点击"🔑 自动生成"按钮生成，AI 调用时携带 `Authorization: Bearer <token>` |
 | **AI 文章归属作者** | 下拉框选择用户。建议创建专用用户 `ai` |
-| **默认文章分类** | 如 `AI知识库`。不存在时自动创建 |
 
 ### 第二步：将 Skill 提交给 AI Agent
 
@@ -86,7 +85,7 @@ Authorization: Bearer <token>
 | `title` | string | ✅ | — | 文章标题 |
 | `text` | string | ✅ | — | 文章正文 |
 | `markdown` | boolean | 否 | `true` | 是否 Markdown 格式 |
-| `category` | string | 否 | 插件设置 | 分类名称，不存在时自动创建 |
+| `category` | string | 否 | 无 | 分类名称，不存在时自动创建 |
 | `tags` | array | 否 | `[]` | 标签数组 |
 | `slug` | string | 否 | 自动生成 | URL 缩略名 |
 | `status` | string | 否 | `waiting` | 文章状态 |
