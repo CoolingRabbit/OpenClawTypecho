@@ -36,8 +36,6 @@ version: 1.1.1
 |--------|------|------|------|
 | `domain` | ✅ | Typecho 博客地址 | `https://www.example.com` |
 | `token` | ✅ | OpenClawTypecho 插件的 API Token | `sk-live-xxx` |
-| `default_category` | 否 | 默认分类 | `AI知识库` |
-| `default_tags` | 否 | 默认标签数组 | `["笔记", "Typecho"]` |
 
 ### 配置命令
 
@@ -46,8 +44,6 @@ version: 1.1.1
 ```
 domain=<博客地址>
 token=<Token>
-default_category=<分类>    (可选)
-default_tags=<标签1,标签2>  (可选)
 ```
 
 **AI 应引导用户完成配置，例如：**
@@ -128,8 +124,8 @@ AI 询问用户是否使用默认值，或让用户自定义。
 | `title` | string | ✅ | 文章标题 | — |
 | `text` | string | ✅ | 文章正文（Markdown） | — |
 | `markdown` | boolean | 否 | 是否 Markdown | `true` |
-| `category` | string | 否 | 分类名称 | `config.default_category` |
-| `tags` | array | 否 | 标签数组 | `config.default_tags` |
+| `category` | string | 否 | 分类名称 | 无（不传则文章无分类） |
+| `tags` | array | 否 | 标签数组 | 无 |
 | `slug` | string | 否 | URL 缩略名 | 自动生成 |
 | `status` | string | 否 | 文章状态 | `waiting` |
 
