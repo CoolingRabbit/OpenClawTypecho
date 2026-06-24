@@ -19,7 +19,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
  *
  * 为 OpenClaw 等 AI 服务提供 REST API，支持文章的创建、查询、更新、删除。
  *
- * @version 2.0.0
+ * @version 2.0.1
  */
 class Action extends Contents implements ActionInterface
 {

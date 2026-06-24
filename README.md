@@ -208,6 +208,11 @@ curl -X POST https://your-blog.com/index.php/action/openclaw-submit \
 
 ## 更新日志
 
+### v2.0.1
+- 同步 SKILL.md 与本地版本
+- category/tags 改为必填项
+- 新增前置条件与快速配置章节
+
 ### v2.0.0
 - 统一版本号，精简文档结构
 - 增强错误提示信息
