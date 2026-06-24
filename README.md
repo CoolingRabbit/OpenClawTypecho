@@ -30,6 +30,7 @@
 - Bearer Token 鉴权 + 敏感内容过滤
 - 文章状态控制：publish / waiting / draft / private / hidden
 - 配套 SKILL.md 写作规范（分类标签体系、脱敏规则、发布检查清单）
+- **ClawHub 一键安装**：`clawhub install typecho-publisher`
 
 ---
 
