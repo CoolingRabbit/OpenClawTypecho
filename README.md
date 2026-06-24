@@ -63,103 +63,45 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 
 ---
 
-## API 参考
+## API 速查
 
 ### 通用说明
 
-- **端点**：`https://<你的博客地址>/action/openclaw-submit`
+- **端点**：`{domain}/index.php/action/openclaw-submit`
 - **方法**：POST
 - **Content-Type**：`application/json`
 - **鉴权**：请求头 `Authorization: Bearer <token>`
 
-### 1. 创建文章 — `submit`
+### 五个操作
 
-```json
-{
-  "action": "submit",
-  "title": "文章标题",
-  "text": "## Markdown 正文",
-  "category": "技术笔记",
-  "tags": ["Typecho", "PHP", "插件开发"],
-  "status": "publish"
-}
-```
+| action | 用途 | 必填字段 |
+|--------|------|---------|
+| `submit` | 创建文章 | `title`, `text` |
+| `list` | 查询列表 | — |
+| `get` | 查询单篇 | `cid` |
+| `update` | 更新文章 | `cid` + 至少一个修改字段 |
+| `delete` | 删除文章 | `cid` |
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `action` | string | ✅ | 固定值 `submit` |
-| `title` | string | ✅ | 标题，≤ 200 字符 |
-| `text` | string | ✅ | 正文，Markdown 格式，≤ 50KB |
-| `markdown` | boolean | 否 | 是否 Markdown，默认 `true` |
-| `category` | string | 否 | 分类名，不存在时自动创建 |
-| `tags` | array | 否 | 标签数组 |
-| `slug` | string | 否 | 缩略名，仅允许 `[a-zA-Z0-9-_]` |
-| `status` | string | 否 | 状态，默认 `waiting` |
+完整参数和写作规范见 [SKILL.md](https://github.com/CoolingRabbit/OpenClawTypecho/blob/main/SKILL.md)。
 
-### 2. 查询列表 — `list`
+---
 
-```json
-{
-  "action": "list",
-  "page": 1,
-  "pageSize": 10,
-  "status": "publish",
-  "category": "技术笔记"
-}
-```
+## 限制与注意事项
 
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `action` | string | ✅ | 固定值 `list` |
-| `page` | int | 否 | 页码，默认 `1` |
-| `pageSize` | int | 否 | 每页数量，默认 `10`，最大 `50` |
-| `status` | string | 否 | 按状态过滤 |
-| `category` | string | 否 | 按分类过滤 |
+### 功能限制
 
-### 3. 查询单篇 — `get`
+| 限制 | 说明 |
+|------|------|
+| **图片上传** | ❌ 不支持。图片需使用外部图床 URL，在正文用 Markdown 图片语法 `![alt](url)` 引用 |
+| **正文长度** | 不超过 50KB（**字节长度**，中文约 1.6 万字），超长应分多篇 |
+| **增量更新** | ❌ `update` 的 `text` 字段是**整体替换**，不是增量追加。更新前必须先 `get` 获取完整原文 |
+| **敏感信息拦截** | 插件自动拦截手机号、身份证号、银行卡号。其他敏感信息（域名、IP、密码等）需 AI 在写作时主动处理 |
+| **分类** | 不强制要求。传入空分类时文章无分类，传入新分类名时自动创建 |
 
-```json
-{
-  "action": "get",
-  "cid": 42
-}
-```
+### 状态默认值
 
-### 4. 更新文章 — `update`
-
-```json
-{
-  "action": "update",
-  "cid": 42,
-  "title": "更新后的标题",
-  "text": "更新后的完整正文",
-  "tags": ["新标签"]
-}
-```
-
-| 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `action` | string | ✅ | 固定值 `update` |
-| `cid` | int | ✅ | 文章 ID |
-| `title` | string | 否 | 新标题 |
-| `text` | string | 否 | 新正文（**传入则整体替换原文，不是增量追加**） |
-| `category` | string | 否 | 新分类 |
-| `tags` | array | 否 | 新标签 |
-| `slug` | string | 否 | 新缩略名 |
-| `status` | string | 否 | 新状态 |
-
-> **注意**：未传的字段保持原值不变。更新正文时需先 `get` 获取原文，修改后传入完整正文。
-
-### 5. 删除文章 — `delete`
-
-```json
-{
-  "action": "delete",
-  "cid": 42
-}
-```
-
-> 删除不可逆，执行前务必确认。
+- API 请求中不传 `status` 时，默认值为 `waiting`
+- SKILL.md 建议 AI 显式传 `status: "publish"` 直接发布
 
 ---
 
@@ -172,6 +114,8 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 | `draft` | `type=post_draft, status=publish` | 草稿，不公开 |
 | `private` | `type=post, status=private` | 私密，仅作者可见 |
 | `hidden` | `type=post, status=hidden` | 隐藏，可通过 URL 访问但不在列表中 |
+
+> `draft` 状态在数据库中存储为 `type=post_draft, status=publish`，这是 Typecho 的 draft 实现机制，调用方无需关心。
 
 ---
 
@@ -188,22 +132,6 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 
 ---
 
-## SKILL.md — AI 写作规范
-
-本仓库附带 [SKILL.md](https://github.com/CoolingRabbit/OpenClawTypecho/blob/main/SKILL.md)，是给 AI 助手的完整操作规范，包含：
-
-- **分类白名单**：技术笔记 / 部署教程 / 运维记录
-- **标签规则**：3-5 个，中英文判定标准，禁用词清单
-- **写作视角**：第三人称技术视角，附正反例
-- **脱敏规则**：8 类敏感信息处理标准
-- **结构模板**：每个分类各一套写作模板
-- **发布检查清单**：10 项发布前检查
-- **更新流程**：list → get → 完整正文 update，禁止同主题新建
-
-将 SKILL.md 提供给 AI 助手后，AI 即可按规范操作博客。
-
----
-
 ## 错误响应
 
 所有错误统一返回：
@@ -217,12 +145,73 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 
 | HTTP 状态码 | 含义 | 常见原因 |
 |-------------|------|---------|
-| 400 | 请求参数错误 | 缺少必填字段、长度超限、敏感信息 |
-| 401 | 鉴权失败 | Token 错误或过期 |
+| 400 | 请求参数错误 | 缺少必填字段、长度超限、敏感信息、文章不存在 |
+| 401 | 鉴权失败 | Token 未配置、格式错误、Token 无效 |
+
+---
+
+## 测试 API
+
+使用 curl 快速测试：
+
+```bash
+curl -X POST https://your-blog.com/index.php/action/openclaw-submit \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-token-here" \
+  -d '{"action":"list","page":1,"pageSize":5}'
+```
+
+---
+
+## FAQ
+
+### Q: API 返回 404 Not Found？
+**A:** 检查以下三点：
+1. 插件是否已在后台启用
+2. 目录名是否为 `OpenClawTypecho`（大小写敏感）
+3. 如果使用伪静态，确保 `index.php` 在路由中
+
+### Q: 文章发布成功但前台看不到？
+**A:** 检查 `status` 字段：
+- `publish` → 前台可见
+- `waiting` → 仅后台可见，需手动审核
+- `draft` → 仅后台草稿箱可见
+
+### Q: 更新文章后内容变少了？
+**A:** `update` 的 `text` 字段是**整体替换**，不是增量追加。正确流程：
+1. 先 `get` 获取完整原文
+2. 在完整原文基础上修改
+3. 将修改后的**完整正文**传入 `update`
+
+### Q: 敏感信息被拦截，怎么排查？
+**A:** 插件自动检测以下 3 类信息：
+- 手机号（1 开头 11 位数字）
+- 身份证号（15 或 18 位）
+- 银行卡号（16-19 位数字）
+
+如被拦截，请检查正文并将这些信息替换为占位符（如 `<phone>`）。
+
+### Q: 分类/标签没有生效？
+**A:** 分类/标签在传入非空值时才会创建和关联。如果传入空字符串或空数组，则不会设置分类/标签。
+
+### Q: 如何修改文章状态？
+**A:** 调用 `update` 并传入 `status` 字段即可，例如：
+```json
+{
+  "action": "update",
+  "cid": 42,
+  "status": "publish"
+}
+```
 
 ---
 
 ## 更新日志
+
+### v2.0.0
+- 统一版本号，精简文档结构
+- 增强错误提示信息
+- 新增限制说明与 FAQ
 
 ### v1.1.0
 - 新增文章查询列表（`list`）

@@ -19,7 +19,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
  *
  * 为 OpenClaw 等 AI 服务提供 REST API，支持文章的创建、查询、更新、删除。
  *
- * @version 1.1.0
+ * @version 2.0.0
  */
 class Action extends Contents implements ActionInterface
 {
@@ -50,7 +50,7 @@ class Action extends Contents implements ActionInterface
             $this->handleRequest();
         } catch (\Exception $e) {
             $code = 400;
-            if ($e->getMessage() === '鉴权失败') {
+            if (strpos($e->getMessage(), '鉴权失败') === 0) {
                 $code = 401;
             }
             $this->sendError($e->getMessage(), $code);
@@ -138,7 +138,7 @@ class Action extends Contents implements ActionInterface
         $cid = $this->insert($contents);
 
         if ($cid <= 0) {
-            throw new \Exception('创建文章失败');
+            throw new \Exception('创建文章失败：数据库写入异常，请检查数据库权限和表结构');
         }
 
         $categoryName = $category;
@@ -276,7 +276,7 @@ class Action extends Contents implements ActionInterface
         );
 
         if (!$article) {
-            throw new \Exception('文章不存在');
+            throw new \Exception('文章不存在：cid ' . $cid . ' 对应的文章未找到');
         }
 
         $article['created'] = date('Y-m-d H:i:s', $article['created']);
@@ -318,7 +318,7 @@ class Action extends Contents implements ActionInterface
         );
 
         if (!$exists) {
-            throw new \Exception('文章不存在');
+            throw new \Exception('文章不存在：cid ' . $cid . ' 对应的文章未找到');
         }
 
         $update = [];
@@ -373,7 +373,7 @@ class Action extends Contents implements ActionInterface
         }
 
         if (empty($update)) {
-            throw new \Exception('没有需要更新的字段');
+            throw new \Exception('没有需要更新的字段：请至少传入 title、text、category、tags、slug 或 status 中的一个');
         }
 
         $update['modified'] = time();
@@ -440,7 +440,7 @@ class Action extends Contents implements ActionInterface
         );
 
         if (!$exists) {
-            throw new \Exception('文章不存在');
+            throw new \Exception('文章不存在：cid ' . $cid . ' 对应的文章未找到');
         }
 
         // 删除关联的分类和标签关系
@@ -560,16 +560,22 @@ class Action extends Contents implements ActionInterface
     protected function authenticate()
     {
         $auth = $this->request->getHeader('Authorization', '');
+        if (empty($auth)) {
+            throw new \Exception('鉴权失败：请求缺少 Authorization 头');
+        }
         if (!preg_match('/^Bearer\s+(\S+)$/i', $auth, $matches)) {
-            throw new \Exception('鉴权失败');
+            throw new \Exception('鉴权失败：Authorization 格式错误，应为 Bearer <token>');
         }
 
         $token = $matches[1];
         $config = Options::alloc()->plugin('OpenClawTypecho');
         $expectedToken = $config->token ?? '';
 
-        if (empty($expectedToken) || empty($token) || !hash_equals($expectedToken, $token)) {
-            throw new \Exception('鉴权失败');
+        if (empty($expectedToken)) {
+            throw new \Exception('鉴权失败：插件未配置 Token，请进入后台 → 插件 → OpenClawTypecho → 设置生成 Token');
+        }
+        if (empty($token) || !hash_equals($expectedToken, $token)) {
+            throw new \Exception('鉴权失败：Token 无效或已过期');
         }
     }
 

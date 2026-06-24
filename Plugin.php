@@ -18,7 +18,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) {
  *
  * @package OpenClawTypecho
  * @author CoolingRabbit
- * @version 1.1.0
+ * @version 2.0.0
  * @link https://github.com/CoolingRabbit/OpenClawTypecho
  */
 class Plugin implements PluginInterface
