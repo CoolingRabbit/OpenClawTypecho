@@ -133,6 +133,25 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 
 ---
 
+## 发布安全提醒（重要 ⚠️）
+
+如果你计划将此 Skill 发布到 ClawHub / SkillHub 等平台供他人使用，**请务必注意：**
+
+### 不要打包真实凭证
+
+- 本仓库的 `.gitignore` 已排除 `config.json`、`.env` 等敏感文件，但**发布前仍需手动检查打包内容**
+- 确保发布的 Skill 包中**不包含任何真实 Token、博客地址或密码**
+- 用户的 `domain` 和 `token` 应由用户在使用时自行配置，而非硬编码在 Skill 文件中
+
+### 已泄露怎么办
+
+如果你发现之前发布的版本中误带了真实凭证：
+1. **立即重新生成 Token**（后台 → 插件 → OpenClawTypecho → 设置 → 重新生成）
+2. **在 ClawHub 上重新发布**，确保新版本不包含 `config.json` 或任何带真实值的配置文件
+3. 旧 Token 已失效，无需担心被继续利用
+
+---
+
 ## 错误响应
 
 所有错误统一返回：
@@ -208,6 +227,10 @@ curl -X POST https://your-blog.com/index.php/action/openclaw-submit \
 ---
 
 ## 更新日志
+
+### v2.0.2
+- 新增 `.gitignore` 排除 `config.json` 等敏感文件
+- 新增「发布安全提醒」章节
 
 ### v2.0.1
 - 同步 SKILL.md 与本地版本
