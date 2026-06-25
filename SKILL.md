@@ -1,5 +1,5 @@
 ---
-name: openclaw-typecho-skill
+name: typecho-publisher-skill
 description: AI 直接管理的 Typecho 博客知识库技能 — 创建、查询、更新、删除文章，内置分类标签体系、写作视角规范、脱敏规则与发布检查清单。当用户要求发布文章到博客、归档技术笔记、保存知识到 Typecho、查询或修改博客文章时触发此技能。涉及"发博客""写笔记""归档""知识库""Typecho""我的博客"等关键词时均应使用。
 version: 2.0.1
 ---
