@@ -6,3 +6,16 @@ Thumbs.db
 .vscode/
 .idea/
 node_modules/
+
+# 敏感配置文件：包含 API Token、博客地址等访问凭证，切勿提交或打包
+config.json
+*.config.json
+.env
+*.env
+.env.*
+config.local.php
+
+# 个人本地数据
+*.local
+*.bak
+*.swp
