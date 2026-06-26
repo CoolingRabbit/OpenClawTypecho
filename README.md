@@ -2,7 +2,7 @@
 
 > 一台廉价的 PHP 虚拟主机 + 一个 Typecho 博客 + 这个插件 = **AI 直接管理的在线知识库**。
 
-装完插件，把 SKILL.md 丢给 AI，即可开始归档、检索、更新文章。无需维护索引文件，无需配置目录规则，无需担心 Token 暴雷。
+装完插件，AI 通过 `typecho-cli` 工具即可开始归档、检索、更新文章。无需维护索引文件，无需配置目录规则，无需担心模型幻觉拼错 API。
 
 **在线演示** → [kjifds.top](https://www.kjifds.top/)
 
@@ -15,26 +15,33 @@
 | **成本** | 虚拟主机 ¥35/年 | 本地免费，但 AI 插件/API 额外计费 |
 | **配置** | 装插件 → 配置 Token → 完事 | 需维护 CLAUDE.md、index.md、目录结构 |
 | **访问** | 天生在线，URL 即可分享 | 本地优先，分享需配同步 |
-| **AI 操作** | API 直写数据库，无 Token 压力 | AI 需读取大量 Markdown，上下文易爆炸 |
+| **AI 操作** | CLI 工具直写数据库，参数固定零幻觉 | AI 需读取大量 Markdown，上下文易爆炸 |
 | **适用** | 快速归档、博客发布、轻量知识库 | 深度研究、复杂图谱、本地编译 |
 
 如果你需要的是**随手丢给 AI 就能自动归档、随时在线查看**的知识库——这个方案就是为你准备的。
 
 ---
 
-## 功能
+## 仓库结构
 
-- 为 OpenClaw 等 AI 服务提供 REST API 端点
-- **完整的文章 CRUD**：创建、查询列表、查询详情、更新、删除
-- 自动创建分类、标签
-- Bearer Token 鉴权 + 敏感内容过滤
-- 文章状态控制：publish / waiting / draft / private / hidden
-- 配套 SKILL.md 写作规范（分类标签体系、脱敏规则、发布检查清单）
-- **ClawHub 一键安装**：`clawhub install typecho-publisher`
+```
+OpenClawTypecho/
+├── Plugin.php          ← Typecho 插件本体（PHP）
+├── Action.php          ← API 处理器（PHP）
+├── skill/              ← AI Skill 工具层（v3.0.0 新增）
+│   ├── SKILL.md        ← AI 写作规范与操作指南
+│   ├── typecho-cli     ← Python CLI 工具
+│   └── plugin.json     ← Skill 元数据
+└── README.md           ← 本文档
+```
+
+**两个使用场景：**
+- **如果你是 Typecho 站长** → 往下看「安装插件」
+- **如果你是 AI / 开发者** → 看「使用 Skill / CLI 工具」
 
 ---
 
-## 安装
+## 安装插件（Typecho 站长）
 
 ### 环境要求
 
@@ -50,21 +57,85 @@
 4. 点击 **🔑 自动生成随机 Token**，复制保存
 5. 选择 AI 发布文章使用的作者账户（建议创建独立用户，用户组设为「贡献者」）
 
-### 配置完成后
+### 给 AI 的配置信息
 
-将以下信息提供给 AI 助手：
+插件配置完成后，将以下信息提供给 AI：
 
-| 信息 | 说明 |
-|------|------|
-| **博客地址** | 如 `https://www.example.com` |
-| **API Token** | 上一步生成的 Token |
-| **SKILL.md** | 本仓库的 [SKILL.md](https://github.com/CoolingRabbit/OpenClawTypecho/blob/main/SKILL.md) 文件 |
+| 信息 | 说明 | 示例 |
+|------|------|------|
+| **博客地址** | 你的 Typecho 博客 URL | `https://www.example.com` |
+| **API Token** | 后台生成的 Token | `CYSlXpaX...` |
 
-AI 阅读 SKILL.md 后即可按规范发布文章。
+AI 会自行配置 `typecho-cli`，无需你手动操作。
 
 ---
 
-## API 速查
+## 使用 Skill（AI / 开发者）
+
+### 安装 Skill
+
+```bash
+openclaw skills install typecho-publisher
+```
+
+> 旧版 `typecho-publisher-skill` 已合并到 `typecho-publisher`，安装旧 slug 会自动重定向到新版本。
+
+### 配置 CLI 工具
+
+创建配置文件 `~/.config/typecho-cli/config.json`：
+
+```json
+{
+  "domain": "https://www.example.com",
+  "token": "your-token-here"
+}
+```
+
+### CLI 命令速查
+
+```bash
+# 查询文章列表
+typecho-cli list [--page N] [--page-size N] [--status STATUS] [--category CATEGORY]
+
+# 查询单篇文章
+typecho-cli get --cid <文章ID>
+
+# 创建文章
+typecho-cli submit \
+  --title "文章标题" \
+  --text "Markdown 正文" \
+  --category "分类名" \
+  --tags "标签1,标签2,标签3" \
+  --status publish
+
+# 更新文章（text 整体替换，不是增量追加）
+typecho-cli update \
+  --cid <文章ID> \
+  --title "新标题" \
+  --text "新正文" \
+  --tags "新标签1,新标签2"
+
+# 删除文章
+typecho-cli delete --cid <文章ID>
+```
+
+> ⚠️ `update` 的 `--text` 是**整体替换**，不是增量追加。更新前必须先 `get` 获取完整原文。
+
+### 环境变量方式（可选）
+
+不写入配置文件，通过环境变量传入：
+
+```bash
+export TYPECHO_DOMAIN="https://www.example.com"
+export TYPECHO_TOKEN="your-token-here"
+typecho-cli list
+```
+
+---
+
+## 开发者：直接调用 API
+
+如果你不想用 CLI 工具，也可以直接调用 REST API：
 
 ### 通用说明
 
@@ -83,7 +154,16 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 | `update` | 更新文章 | `cid` + 至少一个修改字段 |
 | `delete` | 删除文章 | `cid` |
 
-完整参数和写作规范见 [SKILL.md](https://github.com/CoolingRabbit/OpenClawTypecho/blob/main/SKILL.md)。
+完整参数和写作规范见 [skill/SKILL.md](https://github.com/CoolingRabbit/OpenClawTypecho/blob/main/skill/SKILL.md)。
+
+### curl 测试
+
+```bash
+curl -X POST https://your-blog.com/index.php/action/openclaw-submit \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-token-here" \
+  -d '{"action":"list","page":1,"pageSize":5}'
+```
 
 ---
 
@@ -135,7 +215,7 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 
 ## 发布安全提醒（重要 ⚠️）
 
-如果你计划将此 Skill 发布到 ClawHub / SkillHub 等平台供他人使用，**请务必注意：**
+如果你计划修改此 Skill 并重新发布到 ClawHub，**请务必注意：**
 
 ### 不要打包真实凭证
 
@@ -170,19 +250,6 @@ AI 阅读 SKILL.md 后即可按规范发布文章。
 
 ---
 
-## 测试 API
-
-使用 curl 快速测试：
-
-```bash
-curl -X POST https://your-blog.com/index.php/action/openclaw-submit \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer your-token-here" \
-  -d '{"action":"list","page":1,"pageSize":5}'
-```
-
----
-
 ## FAQ
 
 ### Q: API 返回 404 Not Found？
@@ -203,6 +270,9 @@ curl -X POST https://your-blog.com/index.php/action/openclaw-submit \
 2. 在完整原文基础上修改
 3. 将修改后的**完整正文**传入 `update`
 
+### Q: CLI 工具返回 "鉴权失败"？
+**A:** 检查 `~/.config/typecho-cli/config.json` 中的 `token` 是否与后台一致。修改 token 后需重新保存后台设置。
+
 ### Q: 敏感信息被拦截，怎么排查？
 **A:** 插件自动检测以下 3 类信息：
 - 手机号（1 开头 11 位数字）
@@ -214,19 +284,15 @@ curl -X POST https://your-blog.com/index.php/action/openclaw-submit \
 ### Q: 分类/标签没有生效？
 **A:** 分类/标签在传入非空值时才会创建和关联。如果传入空字符串或空数组，则不会设置分类/标签。
 
-### Q: 如何修改文章状态？
-**A:** 调用 `update` 并传入 `status` 字段即可，例如：
-```json
-{
-  "action": "update",
-  "cid": 42,
-  "status": "publish"
-}
-```
-
 ---
 
 ## 更新日志
+
+### v3.0.0
+- **新增 `skill/` 目录**：包含 `typecho-cli` Python CLI 工具、plugin.json、更新版 SKILL.md
+- **AI 操作方式变更**：不再通过读 SKILL.md 手动拼 HTTP 请求，改为调用 `typecho-cli` 命令
+- **ClawHub Skill 合并**：旧版 `typecho-publisher-skill` 合并到 `typecho-publisher`
+- **支持环境变量配置**：`TYPECHO_DOMAIN` / `TYPECHO_TOKEN`
 
 ### v2.0.2
 - 新增 `.gitignore` 排除 `config.json` 等敏感文件
