@@ -51,7 +51,7 @@ OpenClawTypecho/
 
 ### 步骤
 
-1. 下载 [最新版本](https://github.com/CoolingRabbit/OpenClawTypecho/releases)
+1. 下载 [最新版本](https://github.com/CoolingRabbit/OpenClawTypecho/tree/main/skill)
 2. 解压到 `usr/plugins/OpenClawTypecho/`（确保目录名正确）
 3. 后台 → 插件 → 启用 **OpenClawTypecho**
 4. 点击 **🔑 自动生成随机 Token**，复制保存
@@ -153,8 +153,6 @@ typecho-cli list
 | `get` | 查询单篇 | `cid` |
 | `update` | 更新文章 | `cid` + 至少一个修改字段 |
 | `delete` | 删除文章 | `cid` |
-
-完整参数和写作规范见 [skill/SKILL.md](https://github.com/CoolingRabbit/OpenClawTypecho/blob/main/skill/SKILL.md)。
 
 ### curl 测试
 
